@@ -98,8 +98,8 @@ jobs:
           pip install Appium-Python-Client
 
       - name: Run Robot tests
-        working-directory: ./appium-tests
-        run: robot tests/
+        run: robot appium-tests/tests/
+
 
       - name: Upload Test Report
         if: always()
