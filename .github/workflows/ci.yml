@@ -57,7 +57,7 @@ jobs:
 
       - name: Run Frontend tests
         working-directory: ./front-playwright-cucumber
-        run: test
+        run: npm test
 
       - name: Upload Test Report
         if: always()
@@ -93,9 +93,9 @@ jobs:
           pip install robotframework-appiumlibrary
           pip install Appium-Python-Client
 
-      - name: Run Mobile tests
+      - name: Run robot tests
         working-directory: ./appium-tests
-        run: robot tests/
+        run: robot appium-tests/tests/
 
       - name: Upload Test Report
         if: always()
