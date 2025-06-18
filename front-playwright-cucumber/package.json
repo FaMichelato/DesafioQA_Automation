@@ -1,0 +1,20 @@
+{
+  "type": "module",
+  "name": "front-playwright-cucumber",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+      "test": "cucumber-js --import support/custom-world.js --import support/hooks.js --import steps/**/*.js features",
+    "test:e2e": "cucumber-js --import ./support/hooks.js --import ./steps/*.js features"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  
+  "devDependencies": {
+    "@cucumber/cucumber": "^11.3.0",
+    "@playwright/test": "^1.53.0",
+    "esm": "^3.2.25"
+  }
+}

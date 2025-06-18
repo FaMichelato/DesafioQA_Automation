@@ -1,0 +1,99 @@
+
+
+
+```yaml
+name: CI Pipeline - Testes Automatizados
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'api-playwright/**'
+      - 'front-playwright-cucumber/**'
+      - 'appium-tests/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'api-playwright/**'
+      - 'front-playwright-cucumber/**'
+      - 'appium-tests/**'
+
+jobs:
+  api-tests:
+    name: API Tests (Playwright)
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'push' && contains(github.event.head_commit.message, 'api-playwright') ||
+      github.event_name == 'pull_request' && github.event.head_commit != null && contains(github.event.head_commit.message, 'api-playwright')
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: |
+          cd api-playwright
+          npm install
+      - name: Run API tests
+        run: |
+          cd api-playwright
+          npx playwright test --reporter=html
+      - name: Upload Playwright Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-report
+          path: api-playwright/playwright-report
+
+  frontend-tests:
+    name: Frontend E2E Tests (Playwright + Cucumber)
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'push' && contains(github.event.head_commit.message, 'front-playwright-cucumber') ||
+      github.event_name == 'pull_request' && github.event.head_commit != null && contains(github.event.head_commit.message, 'front-playwright-cucumber')
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: |
+          cd front-playwright-cucumber
+          npm install
+      - name: Run Frontend E2E tests
+        run: |
+          cd front-playwright-cucumber
+          npx cucumber-js --import support/custom-world.js --import support/hooks.js --import steps/*.js features --format html:report.html
+      - name: Upload Cucumber Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: cucumber-report
+          path: front-playwright-cucumber/report.html
+
+  mobile-tests:
+    name: Mobile Tests (Appium + Robot Framework)
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'push' && contains(github.event.head_commit.message, 'appium-tests') ||
+      github.event_name == 'pull_request' && github.event.head_commit != null && contains(github.event.head_commit.message, 'appium-tests')
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install Robot Framework and dependencies
+        run: |
+          pip install robotframework
+          pip install AppiumLibrary
+      - name: Run Appium tests
+        run: |
+          robot appium-tests/tests/
+      - name: Upload Robot Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: robot-report
+          path: appium-tests/report.html
