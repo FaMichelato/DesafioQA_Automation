@@ -1,7 +1,3 @@
-
-
-
-```yaml
 name: CI Pipeline - Testes Automatizados
 
 on:
