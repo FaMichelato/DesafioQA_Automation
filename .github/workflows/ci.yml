@@ -57,7 +57,7 @@ jobs:
 
       - name: Run Frontend tests
         working-directory: ./front-playwright-cucumber
-        run: npx cucumber-js --require support/custom-world.js --require support/hooks.js --require steps/*.js features
+        run: test
 
       - name: Upload Test Report
         if: always()

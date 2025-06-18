@@ -5,6 +5,7 @@ import { CheckoutPage } from '../pages/CheckoutPage.js';
 import { ProductsPage } from '../pages/ProductsPage.js'; 
 
 
+
 let page;
 let loginPage;
 let productsPage;
